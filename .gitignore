@@ -1,0 +1,12 @@
+# env
+.env.dev
+.env.prod
+.env.ollama
+
+# docker
+docker-compose.dev.yml
+docker-compose.ollama.yml
+
+# others
+/shared
+/credentials
