@@ -10,6 +10,7 @@ x-n8n: &service-n8n
 services:
   postgres:
     image: postgres:17-alpine
+    container_name: postgres-n8n
     networks:
       - caddy_network
     restart: unless-stopped
