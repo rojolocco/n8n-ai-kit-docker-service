@@ -3,7 +3,7 @@ x-n8n: &service-n8n
   networks:
     - caddy_network
   env_file:
-    - .env.prod
+    - .env
   links:
     - postgres
 
@@ -14,7 +14,7 @@ services:
       - caddy_network
     restart: unless-stopped
     env_file:
-      - .env.prod
+      - .env
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
