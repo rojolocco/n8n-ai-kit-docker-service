@@ -1,7 +1,6 @@
 # env
 .env
 .env.dev
-.env.prod
 .env.ollama
 
 # docker
