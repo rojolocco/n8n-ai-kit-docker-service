@@ -38,6 +38,22 @@ services:
       test: ['CMD-SHELL', 'pg_isready -h localhost -U ${POSTGRES_USER} -d ${POSTGRES_DB}']
       timeout: 3s
 
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    restart: always
+    ports:
+      - "8085:80"
+    env_file:
+      - .env
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    networks:
+      - caddy_network
+    depends_on:
+      postgres:
+        condition: service_healthy
+
   n8n:
     image: docker.n8n.io/n8nio/n8n
     container_name: n8n
@@ -68,6 +84,8 @@ volumes:
   qdrant_data:
     driver: local
   postgres_data:
+    driver: local
+  pgadmin_data:
     driver: local
   n8n_data:
     driver: local
