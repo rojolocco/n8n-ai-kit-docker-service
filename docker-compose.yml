@@ -1,6 +1,6 @@
 services:
   qdrant:
-    image: qdrant/qdrant:latest
+    image: qdrant/qdrant
     container_name: qdrant
     restart: always
     ports:
@@ -18,7 +18,7 @@ services:
           cpus: "1"
 
   postgres:
-    image: postgres:17-alpine
+    image: postgres
     container_name: postgres
     restart: always
     env_file:
@@ -39,7 +39,7 @@ services:
       timeout: 3s
   
   pgadmin:
-    image: dpage/pgadmin4:latest
+    image: dpage/pgadmin4
     container_name: pgadmin
     restart: always
     ports:
