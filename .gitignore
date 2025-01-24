@@ -1,0 +1,10 @@
+# env
+.env
+.env.dev
+
+# docker
+docker-compose.dev.yml
+docker-compose.ollama.yml
+
+# others
+/n8n

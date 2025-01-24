@@ -1,0 +1,92 @@
+services:
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: qdrant
+    restart: always
+    ports:
+      - "6333:6333"
+    env_file:
+      - .env
+    volumes:
+      - qdrant_data:/qdrant/storage
+    networks:
+      - caddy_network
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: "1"
+
+  postgres:
+    image: postgres:17-alpine
+    container_name: postgres
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - caddy_network
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: "1"
+    healthcheck: 
+      interval: 10s
+      retries: 5
+      test: ['CMD-SHELL', 'pg_isready -h localhost -U ${POSTGRES_USER} -d ${POSTGRES_DB}']
+      timeout: 3s
+  
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    restart: always
+    ports:
+      - "8085:80"
+    env_file:
+      - .env
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    networks:
+      - caddy_network
+
+  n8n:
+    image: docker.n8n.io/n8nio/n8n
+    container_name: n8n
+    restart: always
+    ports:
+      - "5678:5678"
+    env_file:
+      - .env
+    volumes:
+      - n8n_data:/home/node/.n8n
+    networks:
+      - caddy_network
+    depends_on:
+      postgres:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 1.5G
+          cpus: "1"
+    healthcheck:
+      interval: 10s
+      retries: 5
+      test: ['CMD-SHELL', 'curl -f http://localhost:5678/ || exit 1']
+      timeout: 5s
+
+volumes:
+  qdrant_data:
+    driver: local
+  postgres_data:
+    driver: local
+  pgadmin_data:
+    driver: local
+  n8n_data:
+    driver: local
+
+networks:
+  caddy_network:
+    external: true
